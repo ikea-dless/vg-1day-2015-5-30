@@ -25,11 +25,13 @@ $app->post('/messages', function (Request $request) use ($app) {
 
     $pokemons = [];
 
-    $dir = opendir(__DIR__. '/resource/' .$body);
-    while( $file_name = readdir( $dir ) ){
+    $dir = opendir(__DIR__. '/resource/' .$body. '/');
+    while($file_name = readdir($dir)){
         $pokemons[] += $file_name;
     }
     $num = rand() % count($pokemons);
+
+    $path = realpath(__DIR__. '/resource/' . $body . '/'. $pokemons[$num]);
 
     /*
 	$hitokage = realpath(__DIR__.'/resource/'.$pokemon[0].'.jpg');
@@ -37,7 +39,7 @@ $app->post('/messages', function (Request $request) use ($app) {
 	$zenigame = realpath(__DIR__.'/resource/'.$pokemon[2].'.jpg');
     */
 
-    $createdMessage = $app->createMessage($username, substr($pokemons[$num], 0, -4), base64_encode(file_get_contents($pokemons[$num])));
+    $createdMessage = $app->createMessage($username, substr($pokemons[$num], 0, -4), base64_encode(file_get_contents($path)));
 
     // $createdMessage = $app->createMessage($username, $body, base64_encode(file_get_contents($app['icon_image_path'])));
 
